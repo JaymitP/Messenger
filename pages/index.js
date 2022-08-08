@@ -14,7 +14,7 @@ export default function Home() {
       </Head>
 
       <main className="grid items-center ">
-        <div className="flex h-90v">
+        <div className="flex h-screen">
           <Navbar />
           <Sidebar />
           <Chat />
