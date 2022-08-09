@@ -18,9 +18,7 @@ const Sidebar = () => {
           <p>Pinned messages</p>
         </div>
         <Contact
-          avatar={
-            "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
-          }
+          avatar={undefined}
           name="John Doe"
           message="Lorem Ipsum..."
           lastSeen="4:30pm"
@@ -31,9 +29,7 @@ const Sidebar = () => {
           <p>All messages</p>
         </div>
         <Contact
-          avatar={
-            "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
-          }
+          avatar={undefined}
           name="John Doe"
           message="Lorem Ipsum..."
           lastSeen="4:30pm"

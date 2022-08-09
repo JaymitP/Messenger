@@ -11,6 +11,7 @@ module.exports = {
         "secondary-dark": "#242424",
         "tertiary-dark": "#34373b",
         "contrasting-dark": "#268d61",
+        "font-dark": "#7b7b7b",
       },
       height: {
         "75v": "75vh",
