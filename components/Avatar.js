@@ -2,8 +2,17 @@ import Image from "next/image";
 import PropTypes from "prop-types";
 
 const Avatar = ({ src, shape }) => {
-  console.log(src);
-  return <Image className={`${shape}`} src={src} width={50} height={50} />;
+  return (
+    <div className="w-12 items-center">
+      <Image
+        className={`${shape}`}
+        src={src}
+        width={40}
+        height={40}
+        layout="responsive"
+      />
+    </div>
+  );
 };
 
 Avatar.defaultProps = {

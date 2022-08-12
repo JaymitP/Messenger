@@ -15,11 +15,13 @@ const Navbar = () => {
       <div className="flex flex-col h-screen justify-between ">
         <div className="flex flex-col items-center gap-8">
           {/* Primary Icons */}
-          <Avatar
-            src={
-              "https://dieselpunkcore.com/wp-content/uploads/2014/06/logo-placeholder.png"
-            }
-          />
+          <div className="my-6">
+            <Avatar
+              src={
+                "https://dieselpunkcore.com/wp-content/uploads/2014/06/logo-placeholder.png"
+              }
+            />
+          </div>
           <NavbarItem href="" Icon={HiOutlineViewGrid} />
           <NavbarItem href="" Icon={HiOutlineCalendar} />
           <NavbarItem href="" Icon={HiOutlineChat} />
