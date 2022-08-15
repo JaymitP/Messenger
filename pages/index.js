@@ -3,7 +3,7 @@ import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Chat from "../components/Chat";
-
+import { signInWithGoogle } from "../firebase";
 export default function Home() {
   return (
     <div className="">
@@ -14,6 +14,7 @@ export default function Home() {
       </Head>
 
       <main className="grid items-center ">
+        <button onClick={signInWithGoogle}>asd</button>
         <div className="flex h-screen overflow-hidden">
           <Navbar />
           <Sidebar />
