@@ -1,8 +1,13 @@
 import Contact from "./Contact";
 import { HiPencilAlt, HiOutlineChat, HiSearch } from "react-icons/hi";
 import { TiPin } from "react-icons/ti";
+import AddChat from "./AddChat";
+import { auth } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Sidebar = () => {
+  const [currentUser] = useAuthState(auth);
+
   return (
     <div className="w-[20vw] bg-secondary-dark border-r-neutral-700 border-r-2">
       <div className="sidebar_title p-6 text-3xl flex justify-between items-center">
@@ -12,12 +17,11 @@ const Sidebar = () => {
 
       <div className="p-6">
         <div className="flex items-center bg-tertiary-dark text-m rounded-md">
+          <AddChat currentUser={currentUser} />
+        </div>
+        <div className="flex items-center bg-tertiary-dark text-m rounded-md">
           <HiSearch className="m-2 fill-[#8294a6]" />
-          <input
-            className="w-full py-2 p-1 bg-tertiary-dark rounded-md focus:outline-none"
-            type="text"
-            placeholder="Search"
-          />
+          <input className="input-small" type="text" placeholder="Search" />
         </div>
       </div>
 

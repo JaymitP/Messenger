@@ -21,6 +21,11 @@ body {
 }
 
 @layer components {
+
+  .input-small {
+    @apply w-full py-2 p-1 bg-tertiary-dark rounded-md focus:outline-none;
+  }
+
   .text-title {
     font-size: 1rem;
     @apply font-semibold;

@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, signInWithGoogle, addUser } from "../firebase";
+import { auth, signInWithGoogle, updateUser } from "../firebase";
 import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }) {
@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     if (user) {
-      addUser(user);
+      updateUser(user);
     }
   }, [user]);
 

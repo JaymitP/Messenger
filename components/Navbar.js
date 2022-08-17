@@ -10,8 +10,10 @@ import {
 import NavbarItem from "./NavbarItem";
 import Avatar from "./Avatar";
 import { auth } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Navbar = () => {
+  const [currentUser] = useAuthState(auth);
   return (
     <div className="w-[5vw] flex flex-col justify-between border-r-neutral-700 border-r-2">
       <div className="flex flex-col h-screen justify-between ">
@@ -42,7 +44,7 @@ const Navbar = () => {
       </div>
 
       <div className="flex flex-col items-center mb-4">
-        <Avatar shape={"rounded-xl scale-90"} />
+        <Avatar src={currentUser.photoURL} shape={"rounded-xl scale-90"} />
       </div>
     </div>
   );

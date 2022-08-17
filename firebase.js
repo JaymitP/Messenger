@@ -1,5 +1,11 @@
 import { getApps, initializeApp } from "firebase/app";
-import { getFirestore, setDoc, doc, serverTimestamp } from "firebase/firestore";
+import {
+  getFirestore,
+  setDoc,
+  addDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -17,7 +23,14 @@ const app = !getApps.length ? initializeApp(firebaseConfig) : app;
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-export const addUser = async (user) => {
+export const auth = getAuth(app);
+
+// Allows option to change the sign in method
+export const signInWithGoogle = () => {
+  signInWithPopup(auth, provider);
+};
+
+export const updateUser = async (user) => {
   const userRef = doc(db, "users", user.uid);
   await setDoc(
     userRef,
@@ -31,8 +44,21 @@ export const addUser = async (user) => {
   );
 };
 
-export const auth = getAuth(app);
+// TODO: Hash current user uid and other user uid to generate a unique chat id, to avoid chat rooms with the same users
+const getChatId = (uid1, uid2) => {
+  return uid1 + uid2;
+};
 
-export const signInWithGoogle = () => {
-  signInWithPopup(auth, provider);
+export const addChat = async (currentUser, targetUserEmail) => {
+  // TODO: Get target user from email
+  const targetUserUID = "eA2pqArzV6eBPsAaSBlqc3NaMFl2";
+
+  const chatRef = doc(db, "chats", getChatId(currentUser.uid, targetUserUID));
+  await setDoc(
+    chatRef,
+    {
+      users: [currentUser.uid, targetUserUID],
+    },
+    { merge: true }
+  );
 };
