@@ -1,11 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore/lite";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-} from "firebase/auth";
+import { getApps, initializeApp } from "firebase/app";
+import { getFirestore, setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -18,30 +13,26 @@ const firebaseConfig = {
   measurementId: "G-LW6PLXXLW1",
 };
 
-const app = initializeApp(firebaseConfig);
+const app = !getApps.length ? initializeApp(firebaseConfig) : app;
 const db = getFirestore(app);
-const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+
+export const addUser = async (user) => {
+  const userRef = doc(db, "users", user.uid);
+  await setDoc(
+    userRef,
+    {
+      name: user.displayName,
+      email: user.email,
+      lastSeen: serverTimestamp(),
+      photoURL: user.photoURL,
+    },
+    { merge: true }
+  );
+};
+
+export const auth = getAuth(app);
+
 export const signInWithGoogle = () => {
-  console.log("auth");
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      // The signed-in user info.
-      const user = result.user;
-      // ...
-      console.log(result);
-    })
-    .catch((error) => {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      // ...
-    });
+  signInWithPopup(auth, provider);
 };

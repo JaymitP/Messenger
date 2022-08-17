@@ -5,9 +5,11 @@ import {
   HiOutlineUsers,
   HiOutlineCog,
   HiOutlineBell,
+  HiOutlineLogout,
 } from "react-icons/hi";
 import NavbarItem from "./NavbarItem";
 import Avatar from "./Avatar";
+import { auth } from "../firebase";
 
 const Navbar = () => {
   return (
@@ -29,8 +31,13 @@ const Navbar = () => {
         </div>
         <div className="flex flex-col items-center gap-8 mb-4">
           {/* Secondary Icons */}
-          <NavbarItem href="" Icon={HiOutlineCog} />
           <NavbarItem href="" Icon={HiOutlineBell} />
+          <NavbarItem
+            onClick={() => {
+              auth.signOut();
+            }}
+            Icon={HiOutlineLogout}
+          />
         </div>
       </div>
 
