@@ -3,7 +3,7 @@ import Avatar from "./Avatar";
 const Contact = ({ avatar, name, message, lastSeen, notification }) => {
   return (
     <div className="flex my-2 gap-2 items-center">
-      <Avatar src={avatar} />
+      <Avatar photoURL={avatar} />
       <div className="w-full">
         <div className="flex justify-between items-center">
           <h1 className="text-title ">{name}</h1>

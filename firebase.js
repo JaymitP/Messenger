@@ -4,7 +4,14 @@ import {
   setDoc,
   addDoc,
   doc,
+  collection,
+  where,
+  query,
+  getDoc,
+  getDocs,
   serverTimestamp,
+  onSnapshot,
+  documentId,
 } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
@@ -22,7 +29,6 @@ const firebaseConfig = {
 const app = !getApps.length ? initializeApp(firebaseConfig) : app;
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
-
 export const auth = getAuth(app);
 
 // Allows option to change the sign in method
@@ -49,16 +55,70 @@ const getChatId = (uid1, uid2) => {
   return uid1 + uid2;
 };
 
-export const addChat = async (currentUser, targetUserEmail) => {
-  // TODO: Get target user from email
-  const targetUserUID = "eA2pqArzV6eBPsAaSBlqc3NaMFl2";
+const getUserByEmail = async (email) => {
+  const q = query(collection(db, "users"), where("email", "==", email));
 
-  const chatRef = doc(db, "chats", getChatId(currentUser.uid, targetUserUID));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs[0];
+};
+
+export const addChat = async (currentUser, targetUserEmail) => {
+  const targetUser = await getUserByEmail(targetUserEmail);
+
+  if (!targetUser) throw new Error("User not found");
+
+  const chatRef = doc(db, "chats", getChatId(currentUser.uid, targetUser.id));
   await setDoc(
     chatRef,
     {
-      users: [currentUser.uid, targetUserUID],
+      users: [currentUser.uid, targetUser.id],
     },
     { merge: true }
   );
+};
+
+export const addMessage = async (currentUser, targetUser, text) => {
+  const messageRef = collection(
+    db,
+    "chats",
+    getChatId(currentUser.uid, targetUser.id),
+    "messages"
+  );
+  await addDoc(
+    messageRef,
+    {
+      text,
+      timestamp: serverTimestamp(),
+    },
+    { merge: true }
+  );
+};
+
+export const getChats = async (currentUser, setChats, setUsers) => {
+  const userChatsRef = query(
+    collection(db, "chats"),
+    where("users", "array-contains", currentUser.uid)
+  );
+
+  onSnapshot(userChatsRef, (snapshot) => {
+    const chats = snapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+    });
+    setChats(chats);
+
+    const userIDs = chats.map((chat) =>
+      chat.users.find((user) => user !== currentUser.uid)
+    );
+    const usersRef = query(
+      collection(db, "users"),
+      where(documentId(), "in", userIDs)
+    );
+    onSnapshot(usersRef, (snapshot) =>
+      setUsers(
+        snapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        })
+      )
+    );
+  });
 };

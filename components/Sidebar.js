@@ -2,12 +2,21 @@ import Contact from "./Contact";
 import { HiPencilAlt, HiOutlineChat, HiSearch } from "react-icons/hi";
 import { TiPin } from "react-icons/ti";
 import AddChat from "./AddChat";
-import { auth } from "../firebase";
+import { auth, getChats } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useEffect, useState } from "react";
 
 const Sidebar = () => {
   const [currentUser] = useAuthState(auth);
+  const [chats, setChats] = useState([]);
+  const [users, setUsers] = useState([]);
 
+  // move to serversideprops in index and prop drill for SSR
+  useEffect(() => {
+    getChats(currentUser, setChats, setUsers);
+  }, []);
+
+  console.log(users);
   return (
     <div className="w-[20vw] bg-secondary-dark border-r-neutral-700 border-r-2">
       <div className="sidebar_title p-6 text-3xl flex justify-between items-center">
@@ -30,8 +39,25 @@ const Sidebar = () => {
           <TiPin />
           <p>PINNED</p>
         </div>
+        {chats.map((chat) => {
+          const otherUser = chat.users.find((user) => user !== currentUser.uid);
+          const contactData = users?.find((user) => user.id === otherUser);
+          if (!contactData) return null;
+          return (
+            <Contact
+              key={chat.id}
+              photoURL={contactData.photoURL}
+              name={contactData.name}
+              lastSeen={contactData.lastSeen
+                .toDate()
+                .toISOString()
+                .substring(0, 16)
+                .replace(/T/, " ")}
+            />
+          );
+        })}
         <Contact
-          avatar={undefined}
+          photoURL={undefined}
           name="John Doe"
           message="Lorem Ipsum..."
           lastSeen="4:30pm"
@@ -42,7 +68,7 @@ const Sidebar = () => {
           <p>ALL MESSAGES</p>
         </div>
         <Contact
-          avatar={undefined}
+          photoURL={undefined}
           name="John Doe"
           message="Lorem Ipsum..."
           lastSeen="4:30pm"

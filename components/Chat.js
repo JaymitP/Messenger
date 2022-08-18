@@ -10,7 +10,7 @@ const Chat = () => {
       <div className="bg-secondary-dark p-4 border-b-neutral-700 border-b-2 flex justify-between items-center">
         <div className="flex gap-4">
           <Avatar
-            src={
+            photoURL={
               "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
             }
           />
@@ -25,7 +25,7 @@ const Chat = () => {
         </div>
       </div>
 
-      <div className="p-4 overflow-y-auto h-full">
+      <div className="p-4 overflow-y-auto h-full pb-20">
         <Message user={Title} />
         <Message user={Title} />
         <Message user={Title} />

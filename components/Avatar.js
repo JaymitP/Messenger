@@ -1,12 +1,12 @@
 import Image from "next/image";
 import PropTypes from "prop-types";
 
-const Avatar = ({ src, shape }) => {
+const Avatar = ({ photoURL, shape }) => {
   return (
     <div className="w-12 items-center">
       <Image
         className={`${shape}`}
-        src={src}
+        src={photoURL}
         width={40}
         height={40}
         layout="responsive"
@@ -16,12 +16,13 @@ const Avatar = ({ src, shape }) => {
 };
 
 Avatar.defaultProps = {
-  src: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+  photoURL:
+    "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
   shape: "rounded-full",
 };
 
 Avatar.propTypes = {
-  src: PropTypes.string.isRequired,
+  photoURL: PropTypes.string.isRequired,
   shape: PropTypes.string,
 };
 

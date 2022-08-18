@@ -6,8 +6,9 @@ const AddChat = ({ currentUser }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    console.log(currentUser);
     // TODO: Input validation
+    if (text === currentUser.email)
+      return alert("You can't send a chat to yourself");
     addChat(currentUser, text);
 
     // onAdd({ text, day, reminder })
@@ -20,21 +21,17 @@ const AddChat = ({ currentUser }) => {
   };
 
   return (
-    <div>
-      <form className="add-form" onSubmit={onSubmit}>
-        <div className="form-control">
-          <input
-            className="input-small"
-            type="text"
-            placeholder="Add Chat"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => handleKeyDown(e)}
-          />
-        </div>
-        {/* TODO: Add submit button for accessbility */}
-      </form>
-    </div>
+    <form className="add-form w-full" onSubmit={onSubmit}>
+      <input
+        className="input-small"
+        type="email"
+        placeholder="Add Chat"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => handleKeyDown(e)}
+      />
+      {/* TODO: Add submit button for accessbility */}
+    </form>
   );
 };
 

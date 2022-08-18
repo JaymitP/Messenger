@@ -21,7 +21,7 @@ const Navbar = () => {
           {/* Primary Icons */}
           <div className="my-6">
             <Avatar
-              src={
+              photoURL={
                 "https://dieselpunkcore.com/wp-content/uploads/2014/06/logo-placeholder.png"
               }
             />
@@ -44,7 +44,7 @@ const Navbar = () => {
       </div>
 
       <div className="flex flex-col items-center mb-4">
-        <Avatar src={currentUser.photoURL} shape={"rounded-xl scale-90"} />
+        <Avatar photoURL={currentUser.photoURL} shape={"rounded-xl scale-90"} />
       </div>
     </div>
   );
