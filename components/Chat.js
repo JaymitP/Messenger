@@ -30,16 +30,6 @@ const Chat = () => {
         <Message user={Title} />
         <Message user={Title} />
         <Message user={Title} />
-        <Message user={Title} />
-        <Message user={Title} />
-        <Message user={Title} />
-        <Message user={Title} />
-        <Message user={Title} />
-        <Message user={Title} />
-        <Message user={Title} />
-        <Message user={Title} />
-        <Message user={Title} />
-        <Message user={Title} />
       </div>
 
       <div className="bg-secondary-dark p-4 bottom-0 absolute w-[75vw] justify-center flex">

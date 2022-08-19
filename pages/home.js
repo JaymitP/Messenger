@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Chat from "../components/Chat";
 import { getChats, getUsers } from "../firebase";
+
 export default function Home({ userChats, targetUsers }) {
   return (
     <div>
@@ -24,8 +25,9 @@ export default function Home({ userChats, targetUsers }) {
 }
 
 export async function getServerSideProps(context) {
-  const userChats = await getChats();
-  const targetUsers = await getUsers(userChats);
+  const userID = context.req.cookies.userID;
+  const userChats = await getChats(userID);
+  const targetUsers = await getUsers(userChats, userID);
   return {
     props: { userChats, targetUsers }, // will be passed to the page component as props
   };

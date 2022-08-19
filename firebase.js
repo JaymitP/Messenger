@@ -94,10 +94,10 @@ export const addMessage = async (currentUser, targetUser, text) => {
   );
 };
 
-export const getChats = async () => {
+export const getChats = async (userID) => {
   const userChatsRef = query(
     collection(db, "chats"),
-    where("users", "array-contains", "lCDUubOSorbMMEj1yuqFMug372W2")
+    where("users", "array-contains", userID)
   );
 
   const chats = (await getDocs(userChatsRef)).docs.map((doc) => {
@@ -107,9 +107,9 @@ export const getChats = async () => {
   return chats;
 };
 
-export const getUsers = async (chats) => {
+export const getUsers = async (chats, userID) => {
   const userIDs = chats.map((chat) =>
-    chat.users.find((user) => user !== "lCDUubOSorbMMEj1yuqFMug372W2")
+    chat.users.find((user) => user !== userID)
   );
   const usersRef = query(
     collection(db, "users"),
