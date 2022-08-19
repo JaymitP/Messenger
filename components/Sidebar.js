@@ -2,21 +2,20 @@ import Contact from "./Contact";
 import { HiPencilAlt, HiOutlineChat, HiSearch } from "react-icons/hi";
 import { TiPin } from "react-icons/ti";
 import AddChat from "./AddChat";
-import { auth, getChats } from "../firebase";
+import { auth, getSnapshots } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect, useState } from "react";
-
-const Sidebar = () => {
+import { useRouter } from "next/router";
+const Sidebar = ({ userChats, targetUsers }) => {
+  const router = useRouter();
   const [currentUser] = useAuthState(auth);
-  const [chats, setChats] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [chats, setChats] = useState(userChats);
+  const [users, setUsers] = useState(targetUsers);
 
-  // move to serversideprops in index and prop drill for SSR
   useEffect(() => {
-    getChats(currentUser, setChats, setUsers);
+    getSnapshots(currentUser, setChats, setUsers);
   }, []);
 
-  console.log(users);
   return (
     <div className="w-[20vw] bg-secondary-dark border-r-neutral-700 border-r-2">
       <div className="sidebar_title p-6 text-3xl flex justify-between items-center">
@@ -34,8 +33,8 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="p-6">
-        <div className="flex items-center gap-2 text-sm text-small">
+      <div className="">
+        <div className="flex items-center gap-2 text-sm text-small px-6">
           <TiPin />
           <p>PINNED</p>
         </div>
@@ -43,27 +42,18 @@ const Sidebar = () => {
           const otherUser = chat.users.find((user) => user !== currentUser.uid);
           const contactData = users?.find((user) => user.id === otherUser);
           if (!contactData) return null;
+
           return (
             <Contact
               key={chat.id}
               photoURL={contactData.photoURL}
               name={contactData.name}
-              lastSeen={contactData.lastSeen
-                .toDate()
-                .toISOString()
-                .substring(0, 16)
-                .replace(/T/, " ")}
+              lastSeen={contactData.lastSeen.substring(0, 16).replace(/T/, " ")}
             />
           );
         })}
-        <Contact
-          photoURL={undefined}
-          name="John Doe"
-          message="Lorem Ipsum..."
-          lastSeen="4:30pm"
-          notification="2"
-        />
-        <div className="flex items-center gap-2 text-sm text-small mt-8">
+
+        <div className="flex items-center gap-2 text-sm text-small mt-8 px-6">
           <TiPin />
           <p>ALL MESSAGES</p>
         </div>

@@ -14,12 +14,14 @@ function MyApp({ Component, pageProps }) {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  if (!user)
+  if (!user) {
+    // if (Component.name !== "Landing") window.location.href = "/";
     return (
       <button onClick={signInWithGoogle} className="bg-contrasting-dark">
         log in
       </button>
     );
+  }
   return <Component {...pageProps} />;
 }
 

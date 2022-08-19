@@ -14,7 +14,7 @@ import {
   documentId,
 } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-
+import { useAuthState } from "react-firebase-hooks/auth";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDLpcpQe5-_SPQPLAOXdLzyiIZ535qripY",
@@ -94,7 +94,39 @@ export const addMessage = async (currentUser, targetUser, text) => {
   );
 };
 
-export const getChats = async (currentUser, setChats, setUsers) => {
+export const getChats = async () => {
+  const userChatsRef = query(
+    collection(db, "chats"),
+    where("users", "array-contains", "lCDUubOSorbMMEj1yuqFMug372W2")
+  );
+
+  const chats = (await getDocs(userChatsRef)).docs.map((doc) => {
+    return { ...doc.data(), id: doc.id };
+  });
+
+  return chats;
+};
+
+export const getUsers = async (chats) => {
+  const userIDs = chats.map((chat) =>
+    chat.users.find((user) => user !== "lCDUubOSorbMMEj1yuqFMug372W2")
+  );
+  const usersRef = query(
+    collection(db, "users"),
+    where(documentId(), "in", userIDs)
+  );
+  const users = (await getDocs(usersRef)).docs.map((doc) => {
+    return {
+      ...doc.data(),
+      id: doc.id,
+      lastSeen: doc.data().lastSeen.toDate().toISOString(),
+    };
+  });
+
+  return users;
+};
+
+export const getSnapshots = async (currentUser, setChats, setUsers) => {
   const userChatsRef = query(
     collection(db, "chats"),
     where("users", "array-contains", currentUser.uid)
@@ -116,7 +148,11 @@ export const getChats = async (currentUser, setChats, setUsers) => {
     onSnapshot(usersRef, (snapshot) =>
       setUsers(
         snapshot.docs.map((doc) => {
-          return { ...doc.data(), id: doc.id };
+          return {
+            ...doc.data(),
+            id: doc.id,
+            lastSeen: doc.data().lastSeen.toDate().toISOString(),
+          };
         })
       )
     );

@@ -37,6 +37,7 @@ const Navbar = () => {
           <NavbarItem
             onClick={() => {
               auth.signOut();
+              window.location.href = "/";
             }}
             Icon={HiOutlineLogout}
           />

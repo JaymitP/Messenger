@@ -2,6 +2,7 @@ import Image from "next/image";
 import PropTypes from "prop-types";
 
 const Avatar = ({ photoURL, shape }) => {
+  // console.log("AVATAR", photoURL);
   return (
     <div className="w-12 items-center">
       <Image
