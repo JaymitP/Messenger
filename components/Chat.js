@@ -14,11 +14,10 @@ const Chat = ({ userChats, targetUsers, firstChat }) => {
   useEffect(() => {
     getSnapshots(currentUser, setChats, setUsers);
   }, []);
-
   return (
     <>
       <Sidebar chats={chats} users={users} setCurrentChat={setCurrentChat} />
-      <ChatBody chatID={currentChat} />
+      <ChatBody chatID={currentChat} currentUserID={currentUser.uid} />
     </>
   );
 };

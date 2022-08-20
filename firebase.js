@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   onSnapshot,
   documentId,
+  orderBy,
 } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -77,16 +78,12 @@ export const addChat = async (currentUser, targetUserEmail) => {
   );
 };
 
-export const addMessage = async (currentUser, targetUser, text) => {
-  const messageRef = collection(
-    db,
-    "chats",
-    getChatId(currentUser.uid, targetUser.id),
-    "messages"
-  );
+export const addMessage = async (currentUserID, chatID, text) => {
+  const messageRef = collection(db, "chats", chatID, "messages");
   await addDoc(
     messageRef,
     {
+      user: currentUserID,
       text,
       timestamp: serverTimestamp(),
     },
@@ -157,4 +154,19 @@ export const getSnapshots = async (currentUser, setChats, setUsers) => {
       )
     );
   });
+};
+
+export const getMessageSnapshot = async (chatID, setMessages) => {
+  const messageRef = query(
+    collection(db, "chats", chatID, "messages"),
+    orderBy("timestamp", "asc")
+  );
+
+  onSnapshot(messageRef, (snapshot) =>
+    setMessages(
+      snapshot.docs.map((doc) => {
+        return { ...doc.data(), id: doc.id };
+      })
+    )
+  );
 };
