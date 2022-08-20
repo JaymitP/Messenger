@@ -9,7 +9,7 @@ import {
 } from "react-icons/hi";
 import NavbarItem from "./NavbarItem";
 import Avatar from "./Avatar";
-import { auth } from "../firebase";
+import { auth, unsubscribeSnapshots } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const Navbar = () => {
@@ -36,6 +36,7 @@ const Navbar = () => {
           <NavbarItem href="" Icon={HiOutlineBell} />
           <NavbarItem
             onClick={() => {
+              unsubscribeSnapshots();
               auth.signOut();
               window.location.href = "/";
             }}

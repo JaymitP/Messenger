@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Navbar from "../components/Navbar";
 import Chat from "../components/Chat";
-import { getChats, getUsers } from "../firebase";
+import { getChats, getUsers, unsubscribeSnapshots } from "../firebase";
 export default function Home({ userChats, targetUsers, firstChat }) {
   return (
     <div>
@@ -26,6 +26,7 @@ export default function Home({ userChats, targetUsers, firstChat }) {
 }
 
 export async function getServerSideProps(context) {
+  unsubscribeSnapshots();
   const userID = context.req.cookies.userID;
   const userChats = await getChats(userID);
   const targetUsers = await getUsers(userChats, userID);

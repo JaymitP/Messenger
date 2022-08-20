@@ -30,7 +30,19 @@ const firebaseConfig = {
 const app = !getApps.length ? initializeApp(firebaseConfig) : app;
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
+const activeSnapshots = {};
+
 export const auth = getAuth(app);
+
+const unsubscribeSnapshot = (ID) => {
+  const unsub = activeSnapshots[ID];
+  if (unsub) unsub();
+};
+export const unsubscribeSnapshots = () => {
+  Object.keys(activeSnapshots).forEach((key) => {
+    unsubscribeSnapshot(key);
+  });
+};
 
 // Allows option to change the sign in method
 export const signInWithGoogle = () => {
@@ -129,7 +141,7 @@ export const getSnapshots = async (currentUser, setChats, setUsers) => {
     where("users", "array-contains", currentUser.uid)
   );
 
-  onSnapshot(userChatsRef, (snapshot) => {
+  const unsub = onSnapshot(userChatsRef, (snapshot) => {
     const chats = snapshot.docs.map((doc) => {
       return { ...doc.data(), id: doc.id };
     });
@@ -154,19 +166,23 @@ export const getSnapshots = async (currentUser, setChats, setUsers) => {
       )
     );
   });
+  activeSnapshots[currentUser.uid] = unsub;
 };
 
 export const getMessageSnapshot = async (chatID, setMessages) => {
+  unsubscribeSnapshot(chatID);
+
   const messageRef = query(
     collection(db, "chats", chatID, "messages"),
     orderBy("timestamp", "asc")
   );
 
-  onSnapshot(messageRef, (snapshot) =>
+  const unsub = onSnapshot(messageRef, (snapshot) =>
     setMessages(
       snapshot.docs.map((doc) => {
         return { ...doc.data(), id: doc.id };
       })
     )
   );
+  activeSnapshots[chatID] = unsub;
 };

@@ -1,6 +1,4 @@
-import Avatar from "./Avatar";
 import Message from "./Message";
-import { HiOutlineVideoCamera, HiOutlinePhone } from "react-icons/hi";
 import { getMessageSnapshot, addMessage } from "../firebase";
 import { useEffect, useState } from "react";
 
@@ -20,26 +18,8 @@ const Chat = ({ chatID, currentUserID }) => {
     setNewMessage("");
   };
   return (
-    <div className="w-[75vw]">
-      <div className="bg-secondary-dark p-4 border-b-neutral-700 border-b-2 flex justify-between items-center">
-        <div className="flex gap-4">
-          <Avatar
-            photoURL={
-              "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
-            }
-          />
-          <div>
-            <h1 className="text-title">{chatID}</h1>
-            <p className="text-small">{`Last seen ${lastSeen}`}</p>
-          </div>
-        </div>
-        <div className="Icons flex items-center gap-4 text-small">
-          <HiOutlineVideoCamera />
-          <HiOutlinePhone />
-        </div>
-      </div>
-
-      <div className="p-4 overflow-y-auto h-full pb-20">
+    <div className="w-[75vw] h-full">
+      <div className="p-4 h-full overflow-y-auto pb-40">
         {messages.map((message) => (
           <Message
             key={message.id}
