@@ -1,10 +1,8 @@
 import Head from "next/head";
 import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
 import Chat from "../components/Chat";
 import { getChats, getUsers } from "../firebase";
-
-export default function Home({ userChats, targetUsers }) {
+export default function Home({ userChats, targetUsers, firstChat }) {
   return (
     <div>
       <Head>
@@ -16,8 +14,11 @@ export default function Home({ userChats, targetUsers }) {
       <main className="grid items-center ">
         <div className="flex h-screen overflow-hidden">
           <Navbar />
-          <Sidebar userChats={userChats} targetUsers={targetUsers} />
-          <Chat />
+          <Chat
+            userChats={userChats}
+            targetUsers={targetUsers}
+            firstChat={firstChat}
+          />
         </div>
       </main>
     </div>
@@ -28,7 +29,8 @@ export async function getServerSideProps(context) {
   const userID = context.req.cookies.userID;
   const userChats = await getChats(userID);
   const targetUsers = await getUsers(userChats, userID);
+
   return {
-    props: { userChats, targetUsers }, // will be passed to the page component as props
+    props: { userChats, targetUsers, firstChat: userChats[0].id }, // will be passed to the page component as props
   };
 }

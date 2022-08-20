@@ -1,8 +1,17 @@
-import Image from "next/image";
 import Avatar from "./Avatar";
-const Contact = ({ photoURL, name, message, lastSeen, notification }) => {
+const Contact = ({
+  photoURL,
+  name,
+  message,
+  lastSeen,
+  notification,
+  onClick,
+}) => {
   return (
-    <div className="flex px-6 py-2 gap-2 items-center cursor-pointer hover:bg-tertiary-dark">
+    <div
+      className="flex px-6 py-2 gap-2 items-center cursor-pointer hover:bg-tertiary-dark"
+      onClick={onClick}
+    >
       <Avatar photoURL={photoURL} />
       <div className="w-full">
         <div className="flex justify-between items-center">

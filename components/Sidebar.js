@@ -2,19 +2,11 @@ import Contact from "./Contact";
 import { HiPencilAlt, HiOutlineChat, HiSearch } from "react-icons/hi";
 import { TiPin } from "react-icons/ti";
 import AddChat from "./AddChat";
-import { auth, getSnapshots } from "../firebase";
+import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-const Sidebar = ({ userChats, targetUsers }) => {
-  const router = useRouter();
-  const [currentUser] = useAuthState(auth);
-  const [chats, setChats] = useState(userChats);
-  const [users, setUsers] = useState(targetUsers);
 
-  useEffect(() => {
-    getSnapshots(currentUser, setChats, setUsers);
-  }, []);
+const Sidebar = ({ chats, users, setCurrentChat }) => {
+  const [currentUser] = useAuthState(auth);
 
   return (
     <div className="w-[20vw] bg-secondary-dark border-r-neutral-700 border-r-2">
@@ -49,6 +41,9 @@ const Sidebar = ({ userChats, targetUsers }) => {
               photoURL={contactData.photoURL}
               name={contactData.name}
               lastSeen={contactData.lastSeen.substring(0, 16).replace(/T/, " ")}
+              onClick={() => {
+                setCurrentChat(chat.id);
+              }}
             />
           );
         })}
