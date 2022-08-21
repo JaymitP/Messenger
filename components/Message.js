@@ -1,7 +1,7 @@
 const Message = ({ client, message }) => {
   return (
     <div className={`my-4 flex ${client ? "justify-end" : ""}`}>
-      <div>
+      <div className="max-w-[45%]">
         {/* <h1>{user}</h1> */}
         <p
           className={`inline-block py-2 px-4 rounded-md ${

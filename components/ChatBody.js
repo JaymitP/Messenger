@@ -1,25 +1,32 @@
 import Message from "./Message";
 import { getMessageSnapshot, addMessage } from "../firebase";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-const Title = "Title";
-const lastSeen = "14 hours ago";
 const Chat = ({ chatID, currentUserID }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-
+  const ref = useRef(null);
   useEffect(() => {
     getMessageSnapshot(chatID, setMessages);
   }, [chatID]);
 
+  useEffect(() => {
+    scrollToBottom();
+  });
   const submitMessage = (e) => {
     e.preventDefault();
     if (newMessage !== "") addMessage(currentUserID, chatID, newMessage);
     setNewMessage("");
+    scrollToBottom("slow");
   };
+
+  const scrollToBottom = (behaviour) => {
+    ref.current?.scrollIntoView({ behaviour: behaviour });
+  };
+
   return (
-    <div className="w-[75vw] h-full">
-      <div className="p-4 h-full overflow-y-auto pb-40">
+    <div className="w-[75vw] h-[90%]">
+      <div className="p-4 h-full overflow-y-auto pb-20">
         {messages.map((message) => (
           <Message
             key={message.id}
@@ -27,6 +34,7 @@ const Chat = ({ chatID, currentUserID }) => {
             message={message.text}
           />
         ))}
+        <div ref={ref}></div>
       </div>
 
       <div className="bg-secondary-dark p-4 bottom-0 absolute w-[75vw] justify-center flex">
