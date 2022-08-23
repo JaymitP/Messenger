@@ -35,6 +35,6 @@ body {
   }
   .text-small {
     font-size: 0.8rem;
-    @apply text-[#a9a9a9]
+    @apply text-secondary-font-dark
   }
 }

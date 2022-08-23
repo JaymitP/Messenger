@@ -10,8 +10,9 @@ module.exports = {
         "primary-dark": "#1b1b1b",
         "secondary-dark": "#242424",
         "tertiary-dark": "#34373b",
-        "contrasting-dark": "#268d61",
+        "contrasting-dark": "#227e62",
         "font-dark": "#7b7b7b",
+        "secondary-font-dark": "#a9a9a9",
       },
       height: {
         "75v": "75vh",

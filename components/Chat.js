@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { auth, getSnapshots } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-const Chat = ({ userChats, targetUsers, firstChat }) => {
+const Chat = ({ userChats, targetUsers, firstChat, firstChatMessages }) => {
   const [currentUser] = useAuthState(auth);
 
   const [currentChat, setCurrentChat] = useState(firstChat);
@@ -28,7 +28,11 @@ const Chat = ({ userChats, targetUsers, firstChat }) => {
       <Sidebar chats={chats} users={users} setCurrentChat={setCurrentChat} />
       <div>
         <Header targetUser={getCurrentChatTarget()} />
-        <ChatBody chatID={currentChat} currentUserID={currentUser.uid} />
+        <ChatBody
+          chatID={currentChat}
+          currentUserID={currentUser.uid}
+          initialMessages={firstChatMessages}
+        />
       </div>
     </>
   );

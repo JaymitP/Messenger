@@ -78,7 +78,10 @@ const getUserByEmail = async (email) => {
 export const addChat = async (currentUser, targetUserEmail) => {
   const targetUser = await getUserByEmail(targetUserEmail);
 
-  if (!targetUser) throw new Error("User not found");
+  if (!targetUser) {
+    alert("User not found");
+    return;
+  }
 
   const chatRef = doc(db, "chats", getChatId(currentUser.uid, targetUser.id));
   await setDoc(
@@ -135,6 +138,22 @@ export const getUsers = async (chats, userID) => {
   return users;
 };
 
+export const getMessages = async (chatID) => {
+  const messagesRef = query(
+    collection(db, "chats", chatID, "messages"),
+    orderBy("timestamp", "asc")
+  );
+  const messages = (await getDocs(messagesRef)).docs.map((doc) => {
+    return {
+      ...doc.data(),
+      id: doc.id,
+      timestamp: doc.data().timestamp.toJSON(),
+    };
+  });
+
+  return messages;
+};
+
 export const getSnapshots = async (currentUser, setChats, setUsers) => {
   const userChatsRef = query(
     collection(db, "chats"),
@@ -154,6 +173,7 @@ export const getSnapshots = async (currentUser, setChats, setUsers) => {
       collection(db, "users"),
       where(documentId(), "in", userIDs)
     );
+    // TODO: Unsub snapshot
     onSnapshot(usersRef, (snapshot) =>
       setUsers(
         snapshot.docs.map((doc) => {
