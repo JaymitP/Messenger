@@ -25,7 +25,6 @@ const Chat = ({ chatID, currentUserID, initialMessages }) => {
     ref.current?.scrollIntoView({ behaviour: behaviour });
   };
 
-  console.log(messages);
   return (
     <div className="w-[75vw] h-[85%]">
       <div className="p-4 h-full overflow-y-auto pb-20">

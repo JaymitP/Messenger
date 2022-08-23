@@ -147,7 +147,7 @@ export const getMessages = async (chatID) => {
     return {
       ...doc.data(),
       id: doc.id,
-      timestamp: doc.data().timestamp.toJSON(),
+      timestamp: doc.data().timestamp.toMillis(),
     };
   });
 
@@ -200,7 +200,11 @@ export const getMessageSnapshot = async (chatID, setMessages) => {
   const unsub = onSnapshot(messageRef, (snapshot) =>
     setMessages(
       snapshot.docs.map((doc) => {
-        return { ...doc.data(), id: doc.id };
+        return {
+          ...doc.data(),
+          id: doc.id,
+          timestamp: doc.data().timestamp?.toMillis(),
+        };
       })
     )
   );
