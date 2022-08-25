@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 export default function Landing() {
   const router = useRouter();
   router.push("/home");
+
+  // Optional landing page
   return (
     <Head>
       <title>Messenger</title>

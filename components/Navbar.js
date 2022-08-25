@@ -38,7 +38,7 @@ const Navbar = () => {
             onClick={() => {
               unsubscribeSnapshots();
               auth.signOut();
-              window.location.href = "/";
+              history.pushState(null, null, "/");
             }}
             Icon={HiOutlineLogout}
           />

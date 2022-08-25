@@ -1,11 +1,12 @@
 import "../styles/globals.css";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, signInWithGoogle, updateUser } from "../firebase";
+import { auth, updateUser } from "../firebase";
 import { useEffect } from "react";
 import { setCookie } from "cookies-next";
+import Login from "../components/Login";
 
 function MyApp({ Component, pageProps }) {
-  const [user, error] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
   useEffect(() => {
     if (user) {
       updateUser(user);
@@ -13,15 +14,9 @@ function MyApp({ Component, pageProps }) {
     }
   }, [user]);
 
-  // if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
   if (!user) {
-    // if (Component.name !== "Landing") window.location.href = "/";
-    return (
-      <button onClick={signInWithGoogle} className="bg-contrasting-dark">
-        log in
-      </button>
-    );
+    return <Login />;
   }
   return <Component {...pageProps} userID={user.uid} />;
 }
